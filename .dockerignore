@@ -1,0 +1,11 @@
+.venv
+__pycache__
+.pytest_cache
+*.pyc
+*.pyo
+*.pyd
+.git
+.gitignore
+.env
+data/feedback_log.jsonl
+

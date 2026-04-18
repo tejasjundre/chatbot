@@ -1,0 +1,163 @@
+[
+  {
+    "id": "P001",
+    "name": "SoundMax Pro",
+    "category": "Headphones",
+    "price": 2999,
+    "specs": {
+      "battery": "30hrs",
+      "bluetooth": "5.3",
+      "noise_cancellation": true
+    },
+    "reviews": [
+      "Amazing sound quality and comfortable fit.",
+      "Battery drains fast during calls.",
+      "Great value for this price."
+    ],
+    "stock": true
+  },
+  {
+    "id": "P002",
+    "name": "AirMax 3000",
+    "category": "Headphones",
+    "price": 3199,
+    "specs": {
+      "battery": "28hrs",
+      "bluetooth": "5.2",
+      "noise_cancellation": true
+    },
+    "reviews": [
+      "Powerful bass and clear vocals.",
+      "A little tight for long sessions."
+    ],
+    "stock": true
+  },
+  {
+    "id": "P003",
+    "name": "ZenBuds Lite",
+    "category": "Earbuds",
+    "price": 1999,
+    "specs": {
+      "battery": "20hrs",
+      "bluetooth": "5.1",
+      "noise_cancellation": false
+    },
+    "reviews": [
+      "Very lightweight and portable.",
+      "Mic quality is average outdoors."
+    ],
+    "stock": true
+  },
+  {
+    "id": "P004",
+    "name": "VisionTab S10",
+    "category": "Tablets",
+    "price": 18999,
+    "specs": {
+      "battery": "12hrs",
+      "bluetooth": "5.0",
+      "noise_cancellation": false
+    },
+    "reviews": [
+      "Smooth performance for study and streaming.",
+      "Screen brightness could be better in sunlight."
+    ],
+    "stock": true
+  },
+  {
+    "id": "P005",
+    "name": "FitPulse Watch",
+    "category": "Wearables",
+    "price": 4499,
+    "specs": {
+      "battery": "10days",
+      "bluetooth": "5.2",
+      "noise_cancellation": false
+    },
+    "reviews": [
+      "Accurate step tracking and great battery.",
+      "Sleep tracking has occasional glitches."
+    ],
+    "stock": true
+  },
+  {
+    "id": "P006",
+    "name": "HomeBeat Mini",
+    "category": "Speakers",
+    "price": 2599,
+    "specs": {
+      "battery": "N/A",
+      "bluetooth": "5.0",
+      "noise_cancellation": false
+    },
+    "reviews": [
+      "Compact speaker with loud output.",
+      "Lacks deeper bass at higher volume."
+    ],
+    "stock": true
+  },
+  {
+    "id": "P007",
+    "name": "GlideMouse X",
+    "category": "Accessories",
+    "price": 1499,
+    "specs": {
+      "battery": "6months",
+      "bluetooth": "5.0",
+      "noise_cancellation": false
+    },
+    "reviews": [
+      "Very smooth tracking and responsive clicks.",
+      "The side buttons feel slightly stiff."
+    ],
+    "stock": false
+  },
+  {
+    "id": "P008",
+    "name": "KeyPro Mechanical",
+    "category": "Accessories",
+    "price": 3999,
+    "specs": {
+      "battery": "N/A",
+      "bluetooth": "N/A",
+      "noise_cancellation": false
+    },
+    "reviews": [
+      "Excellent tactile feedback for typing.",
+      "Too loud for shared office spaces."
+    ],
+    "stock": true
+  },
+  {
+    "id": "P009",
+    "name": "PowerCore 20000",
+    "category": "Power",
+    "price": 2299,
+    "specs": {
+      "battery": "20000mAh",
+      "bluetooth": "N/A",
+      "noise_cancellation": false
+    },
+    "reviews": [
+      "Charges phone multiple times reliably.",
+      "A bit heavy in small bags."
+    ],
+    "stock": true
+  },
+  {
+    "id": "P010",
+    "name": "SmartCam Secure",
+    "category": "Security",
+    "price": 5499,
+    "specs": {
+      "battery": "N/A",
+      "bluetooth": "5.0",
+      "noise_cancellation": false
+    },
+    "reviews": [
+      "Sharp video quality even at night.",
+      "Setup takes time for first use."
+    ],
+    "stock": true
+  }
+]

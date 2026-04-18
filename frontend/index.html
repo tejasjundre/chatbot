@@ -1,0 +1,883 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Plexi Bot Workspace</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;700;800&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg-1: #0b1724;
+      --bg-2: #10374a;
+      --bg-3: #1f4c34;
+      --panel: rgba(255, 255, 255, 0.1);
+      --panel-deep: rgba(5, 12, 21, 0.45);
+      --panel-border: rgba(255, 255, 255, 0.28);
+      --text: #ecf4fb;
+      --muted: #b9c9d7;
+      --accent: #2fe6b4;
+      --accent-warm: #ffb45d;
+      --accent-cool: #53b5ff;
+      --danger: #ef4444;
+      --radius-xl: 20px;
+      --radius-lg: 14px;
+      --radius-md: 10px;
+      --shadow: 0 28px 60px rgba(0, 0, 0, 0.4);
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      color: var(--text);
+      font-family: "Manrope", "Segoe UI", sans-serif;
+      background:
+        radial-gradient(circle at 8% 8%, #25617f 0%, transparent 35%),
+        radial-gradient(circle at 89% 92%, #2c6e42 0%, transparent 30%),
+        linear-gradient(145deg, var(--bg-1), var(--bg-2), var(--bg-3));
+      padding: 16px;
+      display: grid;
+      place-items: center;
+    }
+
+    .workspace {
+      width: min(1180px, 100%);
+      min-height: 88vh;
+      display: grid;
+      grid-template-columns: 330px 1fr;
+      gap: 14px;
+      animation: in 420ms ease-out;
+    }
+
+    @keyframes in {
+      from { opacity: 0; transform: translateY(12px) scale(0.99); }
+      to { opacity: 1; transform: translateY(0) scale(1); }
+    }
+
+    .panel,
+    .chat-shell {
+      border-radius: var(--radius-xl);
+      border: 1px solid var(--panel-border);
+      background: var(--panel);
+      backdrop-filter: blur(9px);
+      box-shadow: var(--shadow);
+      overflow: hidden;
+    }
+
+    .panel {
+      display: grid;
+      grid-template-rows: auto auto 1fr auto;
+      min-height: 88vh;
+    }
+
+    .panel-head {
+      padding: 16px;
+      border-bottom: 1px solid var(--panel-border);
+      background: linear-gradient(120deg, rgba(255,255,255,0.03), rgba(255,255,255,0.12));
+    }
+
+    .logo-row {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .logo {
+      width: 40px;
+      height: 40px;
+      border-radius: 12px;
+      display: grid;
+      place-items: center;
+      font-weight: 800;
+      color: #08111d;
+      background: linear-gradient(135deg, var(--accent), var(--accent-warm));
+    }
+
+    h1, h2, h3, p {
+      margin: 0;
+    }
+
+    .panel-head h1 {
+      font-size: 1.04rem;
+      line-height: 1.2;
+    }
+
+    .panel-head p {
+      margin-top: 8px;
+      color: var(--muted);
+      font-size: 0.86rem;
+      line-height: 1.4;
+    }
+
+    .mini-help {
+      margin: 12px 16px 0;
+      padding: 10px;
+      border-radius: var(--radius-md);
+      border: 1px solid rgba(255,255,255,0.2);
+      background: rgba(255,255,255,0.06);
+      font-size: 0.76rem;
+      color: var(--muted);
+      line-height: 1.4;
+    }
+
+    .capabilities {
+      padding: 12px;
+      overflow-y: auto;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .cap-card {
+      border: 1px solid rgba(255,255,255,0.24);
+      border-radius: var(--radius-md);
+      background: var(--panel-deep);
+      padding: 10px;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .cap-card h3 {
+      font-size: 0.92rem;
+      line-height: 1.25;
+    }
+
+    .cap-card p {
+      color: var(--muted);
+      font-size: 0.78rem;
+      line-height: 1.35;
+    }
+
+    .example-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+    }
+
+    .example-chip {
+      border: 1px solid rgba(83, 181, 255, 0.35);
+      background: rgba(83, 181, 255, 0.14);
+      color: #d9f0ff;
+      border-radius: 999px;
+      padding: 5px 9px;
+      font-size: 0.71rem;
+      font-family: "Space Mono", Consolas, monospace;
+      cursor: pointer;
+      transition: transform 120ms ease, background-color 120ms ease;
+    }
+
+    .example-chip:hover {
+      transform: translateY(-1px);
+      background: rgba(83, 181, 255, 0.2);
+    }
+
+    .panel-foot {
+      border-top: 1px solid var(--panel-border);
+      padding: 12px;
+      display: grid;
+      gap: 8px;
+      background: rgba(0, 0, 0, 0.2);
+    }
+
+    .panel-foot button {
+      border-radius: 999px;
+      padding: 8px 12px;
+      border: 1px solid transparent;
+      font-family: inherit;
+      font-weight: 700;
+      font-size: 0.8rem;
+      cursor: pointer;
+    }
+
+    .btn-ghost {
+      color: var(--text);
+      background: rgba(255, 255, 255, 0.08);
+      border-color: var(--panel-border);
+    }
+
+    .btn-accent {
+      color: #08111d;
+      background: linear-gradient(130deg, var(--accent), #8bf6cc);
+      border-color: rgba(255, 255, 255, 0.2);
+    }
+
+    .chat-shell {
+      display: grid;
+      grid-template-rows: auto 1fr auto auto;
+      min-height: 88vh;
+    }
+
+    .chat-head {
+      border-bottom: 1px solid var(--panel-border);
+      padding: 14px 16px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 12px;
+      background: linear-gradient(120deg, rgba(255,255,255,0.03), rgba(255,255,255,0.12));
+    }
+
+    .chat-head strong {
+      display: block;
+      font-size: 1.05rem;
+    }
+
+    .chat-head span {
+      color: var(--muted);
+      font-size: 0.8rem;
+    }
+
+    .session-tag {
+      font-family: "Space Mono", Consolas, monospace;
+      font-size: 0.76rem;
+      padding: 4px 8px;
+      border-radius: 999px;
+      border: 1px solid rgba(255, 255, 255, 0.3);
+      color: #d6ebf8;
+      background: rgba(255,255,255,0.08);
+    }
+
+    .chat-log {
+      overflow-y: auto;
+      padding: 16px;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      scroll-behavior: smooth;
+    }
+
+    .message {
+      max-width: 86%;
+      border-radius: var(--radius-lg);
+      border: 1px solid rgba(255,255,255,0.2);
+      padding: 10px 12px;
+      line-height: 1.42;
+      animation: bubble-in 160ms ease-out;
+    }
+
+    .message.user {
+      align-self: flex-end;
+      background: rgba(31, 58, 84, 0.92);
+    }
+
+    .message.bot {
+      align-self: flex-start;
+      background: rgba(33, 70, 54, 0.94);
+    }
+
+    @keyframes bubble-in {
+      from { opacity: 0; transform: translateY(5px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .meta {
+      margin-top: 6px;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      font-size: 0.71rem;
+      color: var(--muted);
+      font-family: "Space Mono", Consolas, monospace;
+      letter-spacing: 0.2px;
+      text-transform: uppercase;
+    }
+
+    .pill {
+      border-radius: 999px;
+      border: 1px solid rgba(255,255,255,0.35);
+      padding: 2px 8px;
+      color: #d9ffec;
+    }
+
+    .suggestions {
+      padding: 0 16px 12px;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      border-bottom: 1px solid rgba(255,255,255,0.12);
+      min-height: 22px;
+    }
+
+    .suggestion-label {
+      width: 100%;
+      color: var(--muted);
+      font-size: 0.74rem;
+      font-family: "Space Mono", Consolas, monospace;
+    }
+
+    .suggestion-chip {
+      border: 1px solid rgba(47, 230, 180, 0.4);
+      color: #d8fff2;
+      background: rgba(47, 230, 180, 0.12);
+      border-radius: 999px;
+      padding: 6px 10px;
+      font-size: 0.74rem;
+      cursor: pointer;
+      font-family: "Space Mono", Consolas, monospace;
+      transition: transform 120ms ease, background-color 120ms ease;
+    }
+
+    .suggestion-chip:hover {
+      transform: translateY(-1px);
+      background: rgba(47, 230, 180, 0.2);
+    }
+
+    .composer {
+      display: grid;
+      grid-template-columns: 1fr auto;
+      gap: 10px;
+      padding: 12px;
+      background: rgba(0, 0, 0, 0.22);
+      border-top: 1px solid var(--panel-border);
+    }
+
+    textarea {
+      width: 100%;
+      min-height: 58px;
+      max-height: 160px;
+      resize: vertical;
+      border-radius: var(--radius-md);
+      border: 1px solid var(--panel-border);
+      background: rgba(255, 255, 255, 0.09);
+      color: var(--text);
+      font-size: 0.94rem;
+      font-family: inherit;
+      padding: 11px;
+      outline: none;
+    }
+
+    textarea::placeholder {
+      color: #aac1d3;
+    }
+
+    .send-btn {
+      border: 1px solid rgba(255,255,255,0.2);
+      border-radius: 12px;
+      background: linear-gradient(140deg, var(--accent), var(--accent-warm));
+      color: #08111d;
+      font-weight: 800;
+      font-size: 0.85rem;
+      padding: 0 16px;
+      min-width: 120px;
+      cursor: pointer;
+    }
+
+    .status-line {
+      padding: 0 14px 10px;
+      color: var(--muted);
+      font-size: 0.76rem;
+      font-family: "Space Mono", Consolas, monospace;
+    }
+
+    .status-line.error {
+      color: var(--danger);
+    }
+
+    @media (max-width: 980px) {
+      .workspace {
+        grid-template-columns: 1fr;
+        min-height: auto;
+      }
+
+      .panel,
+      .chat-shell {
+        min-height: 72vh;
+      }
+    }
+
+    @media (max-width: 640px) {
+      body {
+        padding: 10px;
+      }
+
+      .message {
+        max-width: 95%;
+      }
+
+      .composer {
+        grid-template-columns: 1fr;
+      }
+
+      .send-btn {
+        min-height: 44px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <main class="workspace">
+    <aside class="panel" aria-label="Capabilities panel">
+      <header class="panel-head">
+        <div class="logo-row">
+          <div class="logo">PB</div>
+          <div>
+            <h1>Plexi Bot</h1>
+            <p>Shopping Copilot Workspace</p>
+          </div>
+        </div>
+        <p id="capSummary">Ask naturally. I route to product, order, return, search, review, and compare workflows.</p>
+      </header>
+      <div class="mini-help">Tip: type <strong>help</strong> anytime for guided usage examples.</div>
+      <section id="capabilitiesPanel" class="capabilities"></section>
+      <footer class="panel-foot">
+        <button id="newSessionBtn" class="btn-ghost" type="button">Start New Session</button>
+        <button id="resetBtn" class="btn-accent" type="button">Reset Current Context</button>
+        <button id="exportBtn" class="btn-ghost" type="button">Export Transcript</button>
+        <button id="feedbackBtn" class="btn-ghost" type="button">Send Feedback</button>
+        <button id="authBtn" class="btn-ghost" type="button">Set API Key</button>
+      </footer>
+    </aside>
+
+    <section class="chat-shell" aria-label="Plexi Bot chat window">
+      <header class="chat-head">
+        <div>
+          <strong>Chat Console</strong>
+          <span>Grounded shopping assistant responses</span>
+        </div>
+        <div id="sessionTag" class="session-tag"></div>
+      </header>
+
+      <section id="chatLog" class="chat-log" aria-live="polite"></section>
+      <section id="suggestionsBar" class="suggestions"></section>
+
+      <form id="chatForm" class="composer">
+        <textarea
+          id="messageInput"
+          placeholder="Try: Show me wireless headphones under 3000"
+          required
+        ></textarea>
+        <button class="send-btn" type="submit">Send</button>
+      </form>
+      <div id="statusLine" class="status-line"></div>
+    </section>
+  </main>
+
+  <script>
+    const chatLog = document.getElementById("chatLog");
+    const chatForm = document.getElementById("chatForm");
+    const messageInput = document.getElementById("messageInput");
+    const statusLine = document.getElementById("statusLine");
+    const sessionTag = document.getElementById("sessionTag");
+    const resetBtn = document.getElementById("resetBtn");
+    const newSessionBtn = document.getElementById("newSessionBtn");
+    const exportBtn = document.getElementById("exportBtn");
+    const feedbackBtn = document.getElementById("feedbackBtn");
+    const authBtn = document.getElementById("authBtn");
+    const capabilitiesPanel = document.getElementById("capabilitiesPanel");
+    const capSummary = document.getElementById("capSummary");
+    const suggestionsBar = document.getElementById("suggestionsBar");
+
+    const STORAGE_KEY = "plexi_bot_session_id";
+    const AUTH_STORAGE_KEY = "plexi_bot_api_key";
+    let authRequired = false;
+    let lastIntent = "unknown";
+    const FALLBACK_EXAMPLES = [
+      "Track ORD-1042",
+      "Show me headphones under 3000",
+      "Compare SoundMax Pro vs AirMax 3000",
+      "What do people think about SoundMax Pro?"
+    ];
+
+    function createSessionId() {
+      if (window.crypto && typeof window.crypto.randomUUID === "function") {
+        return window.crypto.randomUUID();
+      }
+      return "xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx".replace(/[xy]/g, c => {
+        const r = Math.random() * 16 | 0;
+        const v = c === "x" ? r : (r & 0x3 | 0x8);
+        return v.toString(16);
+      });
+    }
+
+    function getSessionId() {
+      let sessionId = localStorage.getItem(STORAGE_KEY);
+      if (!sessionId) {
+        sessionId = createSessionId();
+        localStorage.setItem(STORAGE_KEY, sessionId);
+      }
+      return sessionId;
+    }
+
+    function setSessionId(value) {
+      localStorage.setItem(STORAGE_KEY, value);
+      sessionTag.textContent = `session ${value.slice(0, 8)}...`;
+    }
+
+    function getApiKey() {
+      return localStorage.getItem(AUTH_STORAGE_KEY) || "";
+    }
+
+    function setApiKey(value) {
+      localStorage.setItem(AUTH_STORAGE_KEY, value);
+    }
+
+    function formatTime() {
+      return new Date().toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" });
+    }
+
+    function escapeHtml(text) {
+      const map = {
+        "&": "&amp;",
+        "<": "&lt;",
+        ">": "&gt;",
+        "\"": "&quot;",
+        "'": "&#039;"
+      };
+      return String(text).replace(/[&<>"']/g, char => map[char]);
+    }
+
+    function setStatus(text, isError = false) {
+      statusLine.textContent = text;
+      statusLine.classList.toggle("error", isError);
+    }
+
+    function buildHeaders(includeJson = true) {
+      const headers = {};
+      if (includeJson) {
+        headers["Content-Type"] = "application/json";
+      }
+      const apiKey = getApiKey();
+      if (apiKey) {
+        headers["x-api-key"] = apiKey;
+      }
+      return headers;
+    }
+
+    async function promptForApiKeyIfNeeded(forcePrompt = false) {
+      if (!authRequired && !forcePrompt) {
+        return;
+      }
+      const existing = getApiKey();
+      if (existing && !forcePrompt) {
+        return;
+      }
+      const entered = window.prompt("Enter backend x-api-key for this workspace:", existing);
+      if (entered && entered.trim()) {
+        setApiKey(entered.trim());
+        setStatus("API key saved in browser storage.");
+      }
+    }
+
+    function addMessage(role, content, meta = {}) {
+      const block = document.createElement("article");
+      block.className = `message ${role}`;
+      const body = escapeHtml(content).replace(/\n/g, "<br>");
+
+      let metaHtml = `<div class="meta"><span>${formatTime()}</span>`;
+      if (meta.intent) {
+        metaHtml += `<span class="pill">${escapeHtml(meta.intent)}</span>`;
+      }
+      if (meta.latencyMs !== undefined && meta.latencyMs !== null) {
+        metaHtml += `<span>${escapeHtml(meta.latencyMs)}ms</span>`;
+      }
+      if (meta.messageCount) {
+        metaHtml += `<span>msgs:${escapeHtml(meta.messageCount)}</span>`;
+      }
+      metaHtml += "</div>";
+
+      block.innerHTML = `<div>${body}</div>${metaHtml}`;
+      chatLog.appendChild(block);
+      chatLog.scrollTop = chatLog.scrollHeight;
+    }
+
+    function renderSuggestions(items) {
+      suggestionsBar.innerHTML = "";
+      if (!Array.isArray(items) || items.length === 0) {
+        return;
+      }
+
+      const label = document.createElement("div");
+      label.className = "suggestion-label";
+      label.textContent = "Suggested next prompts";
+      suggestionsBar.appendChild(label);
+
+      for (const item of items) {
+        const button = document.createElement("button");
+        button.type = "button";
+        button.className = "suggestion-chip";
+        button.textContent = item;
+        button.addEventListener("click", () => {
+          messageInput.value = item;
+          messageInput.focus();
+        });
+        suggestionsBar.appendChild(button);
+      }
+    }
+
+    async function sendMessage(message) {
+      setStatus("Plexi Bot is processing your request...");
+      addMessage("user", message);
+
+      try {
+        await promptForApiKeyIfNeeded();
+        const response = await fetch("/chat", {
+          method: "POST",
+          headers: buildHeaders(true),
+          body: JSON.stringify({
+            session_id: getSessionId(),
+            message
+          })
+        });
+
+        if (response.status === 401) {
+          await promptForApiKeyIfNeeded(true);
+          throw new Error("Unauthorized. Please verify x-api-key.");
+        }
+
+        if (!response.ok) {
+          throw new Error(`HTTP ${response.status}: ${await response.text()}`);
+        }
+
+        const payload = await response.json();
+        lastIntent = payload.intent || "unknown";
+        addMessage("bot", payload.reply, {
+          intent: payload.intent || "unknown",
+          latencyMs: payload.latency_ms,
+          messageCount: payload.message_count
+        });
+        renderSuggestions(payload.suggestions || []);
+        setStatus(`Ready | intent=${payload.intent} | latency=${payload.latency_ms}ms`);
+      } catch (error) {
+        console.error(error);
+        addMessage(
+          "bot",
+          "The API request failed. Please make sure the backend is running and reachable.",
+          { intent: "error" }
+        );
+        setStatus("Request failed. Check server logs.", true);
+      }
+    }
+
+    async function resetConversation() {
+      setStatus("Resetting session...");
+      try {
+        await promptForApiKeyIfNeeded();
+        const response = await fetch("/reset", {
+          method: "POST",
+          headers: buildHeaders(true),
+          body: JSON.stringify({ session_id: getSessionId() })
+        });
+
+        if (response.status === 401) {
+          await promptForApiKeyIfNeeded(true);
+          throw new Error("Unauthorized");
+        }
+
+        if (!response.ok) {
+          throw new Error(`HTTP ${response.status}`);
+        }
+
+        chatLog.innerHTML = "";
+        renderSuggestions(FALLBACK_EXAMPLES.slice(0, 2));
+        addMessage("bot", "Session reset complete. Ask your next shopping question.", { intent: "system" });
+        setStatus("Context reset");
+      } catch (error) {
+        console.error(error);
+        setStatus("Could not reset session.", true);
+      }
+    }
+
+    function startNewSession() {
+      setSessionId(createSessionId());
+      chatLog.innerHTML = "";
+      renderSuggestions(FALLBACK_EXAMPLES);
+      addMessage(
+        "bot",
+        "New session created. You can ask about products, order tracking, returns, review sentiment, and comparisons.",
+        { intent: "welcome" }
+      );
+      setStatus("New session ready");
+    }
+
+    function insertPrompt(prompt) {
+      messageInput.value = prompt;
+      messageInput.focus();
+    }
+
+    function buildCapabilityCard(card) {
+      const article = document.createElement("article");
+      article.className = "cap-card";
+
+      const title = document.createElement("h3");
+      title.textContent = card.title;
+      article.appendChild(title);
+
+      const description = document.createElement("p");
+      description.textContent = card.description;
+      article.appendChild(description);
+
+      const row = document.createElement("div");
+      row.className = "example-row";
+      const examples = Array.isArray(card.examples) ? card.examples : [];
+      for (const example of examples) {
+        const chip = document.createElement("button");
+        chip.type = "button";
+        chip.className = "example-chip";
+        chip.textContent = example;
+        chip.addEventListener("click", () => insertPrompt(example));
+        row.appendChild(chip);
+      }
+      article.appendChild(row);
+      return article;
+    }
+
+    async function loadCapabilities() {
+      capabilitiesPanel.innerHTML = "";
+      try {
+        const response = await fetch("/capabilities");
+        if (!response.ok) {
+          throw new Error(`HTTP ${response.status}`);
+        }
+        const payload = await response.json();
+        capSummary.textContent = payload.summary || capSummary.textContent;
+        const cards = Array.isArray(payload.cards) ? payload.cards : [];
+        for (const card of cards) {
+          capabilitiesPanel.appendChild(buildCapabilityCard(card));
+        }
+        if (cards.length === 0) {
+          renderFallbackCapabilities();
+        }
+      } catch (error) {
+        console.error(error);
+        renderFallbackCapabilities();
+      }
+    }
+
+    function renderFallbackCapabilities() {
+      capabilitiesPanel.innerHTML = "";
+      for (const example of FALLBACK_EXAMPLES) {
+        const card = {
+          title: "Quick Example",
+          description: "Click to send a proven test prompt.",
+          examples: [example]
+        };
+        capabilitiesPanel.appendChild(buildCapabilityCard(card));
+      }
+    }
+
+    async function loadPublicConfig() {
+      try {
+        const response = await fetch("/config/public");
+        if (!response.ok) {
+          return;
+        }
+        const config = await response.json();
+        authRequired = Boolean(config.auth_required);
+        authBtn.style.display = authRequired ? "inline-block" : "none";
+        if (authRequired) {
+          await promptForApiKeyIfNeeded();
+        }
+      } catch (error) {
+        console.error(error);
+      }
+    }
+
+    async function exportTranscript() {
+      try {
+        await promptForApiKeyIfNeeded();
+        const sid = getSessionId();
+        const response = await fetch(`/transcript/${sid}`, { headers: buildHeaders(false) });
+        if (response.status === 401) {
+          await promptForApiKeyIfNeeded(true);
+          throw new Error("Unauthorized");
+        }
+        if (!response.ok) {
+          throw new Error(`HTTP ${response.status}`);
+        }
+        const payload = await response.json();
+        const blob = new Blob([JSON.stringify(payload, null, 2)], { type: "application/json" });
+        const url = URL.createObjectURL(blob);
+        const anchor = document.createElement("a");
+        anchor.href = url;
+        anchor.download = `plexi-transcript-${sid.slice(0, 8)}.json`;
+        anchor.click();
+        URL.revokeObjectURL(url);
+        setStatus("Transcript exported.");
+      } catch (error) {
+        console.error(error);
+        setStatus("Could not export transcript.", true);
+      }
+    }
+
+    async function submitFeedback() {
+      const rawRating = window.prompt("Rate this bot from 1 to 5:");
+      if (!rawRating) {
+        return;
+      }
+      const rating = Number(rawRating);
+      if (!Number.isInteger(rating) || rating < 1 || rating > 5) {
+        setStatus("Feedback requires a rating between 1 and 5.", true);
+        return;
+      }
+      const comment = window.prompt("Optional feedback note:") || "";
+      try {
+        await promptForApiKeyIfNeeded();
+        const response = await fetch("/feedback", {
+          method: "POST",
+          headers: buildHeaders(true),
+          body: JSON.stringify({
+            session_id: getSessionId(),
+            rating,
+            comment,
+            intent: lastIntent
+          })
+        });
+        if (response.status === 401) {
+          await promptForApiKeyIfNeeded(true);
+          throw new Error("Unauthorized");
+        }
+        if (!response.ok) {
+          throw new Error(`HTTP ${response.status}`);
+        }
+        setStatus("Feedback submitted. Thank you.");
+      } catch (error) {
+        console.error(error);
+        setStatus("Could not send feedback.", true);
+      }
+    }
+
+    chatForm.addEventListener("submit", async event => {
+      event.preventDefault();
+      const message = messageInput.value.trim();
+      if (!message) {
+        return;
+      }
+      messageInput.value = "";
+      await sendMessage(message);
+      messageInput.focus();
+    });
+
+    messageInput.addEventListener("keydown", event => {
+      if (event.key === "Enter" && !event.shiftKey) {
+        event.preventDefault();
+        chatForm.requestSubmit();
+      }
+    });
+
+    resetBtn.addEventListener("click", resetConversation);
+    newSessionBtn.addEventListener("click", startNewSession);
+    exportBtn.addEventListener("click", exportTranscript);
+    feedbackBtn.addEventListener("click", submitFeedback);
+    authBtn.addEventListener("click", () => promptForApiKeyIfNeeded(true));
+
+    setSessionId(getSessionId());
+    renderSuggestions(FALLBACK_EXAMPLES);
+    addMessage(
+      "bot",
+      "Welcome. I can help you find products, track orders, explain returns, summarize reviews, and compare options.",
+      { intent: "welcome" }
+    );
+    setStatus("Ready");
+    authBtn.style.display = "none";
+    loadPublicConfig();
+    loadCapabilities();
+    messageInput.focus();
+  </script>
+</body>
+</html>

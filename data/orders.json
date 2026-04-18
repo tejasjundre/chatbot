@@ -1,0 +1,37 @@
+[
+  {
+    "order_id": "ORD-1042",
+    "customer": "Tejas",
+    "items": ["SoundMax Pro"],
+    "status": "Shipped",
+    "estimated_delivery": "2026-04-22"
+  },
+  {
+    "order_id": "ORD-1043",
+    "customer": "Asha",
+    "items": ["VisionTab S10", "PowerCore 20000"],
+    "status": "Processing",
+    "estimated_delivery": "2026-04-25"
+  },
+  {
+    "order_id": "ORD-1044",
+    "customer": "Rohan",
+    "items": ["AirMax 3000"],
+    "status": "Out for Delivery",
+    "estimated_delivery": "2026-04-19"
+  },
+  {
+    "order_id": "ORD-1045",
+    "customer": "Meera",
+    "items": ["FitPulse Watch"],
+    "status": "Delivered",
+    "estimated_delivery": "2026-04-15"
+  },
+  {
+    "order_id": "ORD-1046",
+    "customer": "Kabir",
+    "items": ["HomeBeat Mini", "ZenBuds Lite"],
+    "status": "Shipped",
+    "estimated_delivery": "2026-04-23"
+  }
+]

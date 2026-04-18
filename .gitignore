@@ -1,0 +1,13 @@
+.env
+__pycache__/
+.pytest_cache/
+*.pyc
+*.pyo
+*.pyd
+.venv/
+venv/
+data/feedback_log.jsonl
+node_modules/
+dist/
+build/
+
