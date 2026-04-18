@@ -9,7 +9,7 @@ from uuid import UUID, uuid4
 
 from fastapi import FastAPI, HTTPException, Request, Response
 from fastapi.middleware.cors import CORSMiddleware
-from fastapi.responses import FileResponse
+from fastapi.responses import FileResponse, RedirectResponse
 from pydantic import BaseModel, Field
 
 from bot.conversation import (
@@ -131,8 +131,15 @@ async def request_middleware(request: Request, call_next: callable) -> Response:
 
 
 @app.get("/")
-def index() -> dict[str, object]:
-    """Return a friendly root response for browser checks."""
+def index() -> RedirectResponse:
+    """Redirect root URL to the web chat UI."""
+
+    return RedirectResponse(url="/ui", status_code=307)
+
+
+@app.get("/api-info")
+def api_info() -> dict[str, object]:
+    """Return API discovery metadata."""
 
     return {
         "service": "Plexi Bot",
