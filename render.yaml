@@ -1,0 +1,28 @@
+services:
+  - type: web
+    name: plexi-bot
+    env: python
+    plan: free
+    buildCommand: pip install -r requirements.txt
+    startCommand: python -m uvicorn main:app --host 0.0.0.0 --port $PORT
+    autoDeploy: true
+    envVars:
+      - key: APP_ENV
+        value: production
+      - key: CORS_ORIGINS
+        value: "*"
+      - key: CHAT_RATE_LIMIT_PER_MINUTE
+        value: "30"
+      - key: ENABLE_METRICS
+        value: "true"
+      - key: FEEDBACK_LOG_PATH
+        value: data/feedback_log.jsonl
+      - key: LLM_PROVIDER
+        value: groq
+      - key: GROQ_MODEL
+        value: llama-3.1-8b-instant
+      - key: GROQ_API_KEY
+        sync: false
+      - key: APP_API_KEY
+        sync: false
+

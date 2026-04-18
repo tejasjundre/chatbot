@@ -152,6 +152,29 @@ Run:
 docker run --rm -p 8000:8000 --env-file .env plexi-bot:latest
 ```
 
+## Fast Cloud Deploy (From GitHub)
+
+Repo:
+```text
+https://github.com/tejasjundre/chatbot
+```
+
+Render (recommended fastest):
+1. Open `https://dashboard.render.com/blueprints`
+2. Click `New Blueprint Instance`
+3. Select the `chatbot` repo (uses `render.yaml`)
+4. Set secret env vars:
+   - `GROQ_API_KEY`
+   - `APP_API_KEY` (optional, for protected API)
+5. Deploy
+
+Railway:
+1. Open `https://railway.app/new`
+2. Choose `Deploy from GitHub repo`
+3. Select `chatbot` repo (uses `railway.toml` + Docker/Nixpacks)
+4. Add env vars from `.env.example`
+5. Deploy
+
 ## Demo Script (Sales + Technical Round)
 
 1. `Show me wireless headphones under 3000`
@@ -177,4 +200,3 @@ python -m pytest -q
   - check provider quota/billing
 - `401 Unauthorized`:
   - set `x-api-key` header or configure UI with the key if `APP_API_KEY` is enabled
-
