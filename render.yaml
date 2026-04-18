@@ -7,6 +7,8 @@ services:
     startCommand: python -m uvicorn main:app --host 0.0.0.0 --port $PORT
     autoDeploy: true
     envVars:
+      - key: PYTHON_VERSION
+        value: 3.11.11
       - key: APP_ENV
         value: production
       - key: CORS_ORIGINS
@@ -25,4 +27,3 @@ services:
         sync: false
       - key: APP_API_KEY
         sync: false
-
